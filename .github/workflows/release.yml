@@ -31,6 +31,8 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: 1.22.x
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Update Module Index
         run: go list
       - name: Publish Module
