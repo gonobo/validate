@@ -19,8 +19,8 @@ func Validate(rule Rule) error {
 	return nil
 }
 
-// Any returns the first error encountered, or nil if all rules pass.
-func Any(rules ...Rule) Rule {
+// AssertAny returns the first error encountered, or nil if all rules pass.
+func AssertAny(rules ...Rule) Rule {
 	return func() error {
 		for _, rule := range rules {
 			if err := rule(); err != nil {
@@ -31,8 +31,8 @@ func Any(rules ...Rule) Rule {
 	}
 }
 
-// All returns an error if all rules fail.
-func All(rules ...Rule) Rule {
+// AssertAll returns an error if all rules fail.
+func AssertAll(rules ...Rule) Rule {
 	return func() error {
 		errs := make([]error, 0)
 		for _, rule := range rules {
@@ -48,8 +48,8 @@ func All(rules ...Rule) Rule {
 	}
 }
 
-// That returns a rule that checks the given condition evaluates to true.
-func That(test bool, format string, args ...any) Rule {
+// AssertThat returns a rule that checks the given condition evaluates to true.
+func AssertThat(test bool, format string, args ...any) Rule {
 	return func() error {
 		if test {
 			return nil
@@ -58,8 +58,8 @@ func That(test bool, format string, args ...any) Rule {
 	}
 }
 
-// If returns a rule that is only executed if the given condition is true.
-func If(test bool, rule Rule) Rule {
+// AssertIf returns a rule that is only executed if the given condition is true.
+func AssertIf(test bool, rule Rule) Rule {
 	return func() error {
 		if test {
 			return rule()
