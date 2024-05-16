@@ -48,7 +48,6 @@ no-dirty:
 # OPERATIONS
 # ==================================================================================== #
 
-## push: push changes to the remote Git repository
 .PHONY: lint
 lint: tidy audit no-dirty
 
