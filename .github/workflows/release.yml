@@ -12,9 +12,13 @@ jobs:
       - run: echo 'The triggering workflow passed'
       - name: Semver bump
         uses: phish108/autotag-action@v1.1.55
+        id: tagger
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           with-v: "true"
+      - run: "echo 'Current version: $tag'"
+        env:
+          tag: ${{ steps.tagger.outputs.new_tag }}
 
   on-failure:
     runs-on: ubuntu-latest
