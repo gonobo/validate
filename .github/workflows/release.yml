@@ -11,14 +11,19 @@ jobs:
     steps:
       - run: echo 'The triggering workflow passed'
       - name: Semver bump
-        uses: phish108/autotag-action@v1.1.55
-        id: tagger
+        id: semver
+        uses: mathieudutour/github-tag-action@v6.2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          with-v: "true"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - run: "echo 'Current version: $tag'"
         env:
-          tag: ${{ steps.tagger.outputs.new_tag }}
+          tag: ${{ steps.semver.outputs.new_tag }}
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.semver.outputs.new_tag }}
+          name: Release ${{ steps.semver.outputs.new_tag }}
+          body: ${{ steps.semver.outputs.changelog }}
 
   on-failure:
     runs-on: ubuntu-latest
