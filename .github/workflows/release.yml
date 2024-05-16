@@ -4,6 +4,10 @@ on:
     workflows: [test]
     branches: [main]
     types: [completed]
+
+env:
+  PACKAGE_NAME: github.com/gonobo/validator
+
 jobs:
   on-success:
     runs-on: ubuntu-latest
@@ -23,6 +27,14 @@ jobs:
           tag: ${{ steps.semver.outputs.new_tag }}
           name: Release ${{ steps.semver.outputs.new_tag }}
           body: ${{ steps.semver.outputs.changelog }}
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.22.x
+      - name: Update Module Index
+        run: go list
+      - name: Publish Module
+        run: GOPROXY=proxy.golang.org go list -m ${{ env.PACKAGE_NAME }}@${{ steps.semver.outputs.new_tag}}
 
   on-failure:
     runs-on: ubuntu-latest
